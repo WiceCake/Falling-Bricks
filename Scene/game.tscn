@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=3 uid="uid://cyhmw4y7qjksk"]
+
+[ext_resource type="Script" uid="uid://d0vl60fauhtaw" path="res://Scripts/game.gd" id="1_mhtsl"]
+[ext_resource type="PackedScene" uid="uid://cge5wjkq1tuwv" path="res://Scene/brick.tscn" id="2_w51g1"]
+[ext_resource type="Script" uid="uid://csjfn5xfcxslf" path="res://Scripts/hit_zone.gd" id="3_03iqk"]
+[ext_resource type="Texture2D" uid="uid://csyg4wbdcdiur" path="res://Assets/fruit-1-hit-box.png" id="4_ihreq"]
+[ext_resource type="AudioStream" uid="uid://xjqyyxft7cvt" path="res://Songs/old_time_slow.mp3" id="5_ihreq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_thj8p"]
+size = Vector2(60, 60)
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_mhtsl")
+brick_scene = ExtResource("2_w51g1")
+
+[node name="SpawnTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(585, 0)
+
+[node name="HitZone" type="Area2D" parent="."]
+position = Vector2(585, 555)
+script = ExtResource("3_03iqk")
+
+[node name="Sprite2D" type="Sprite2D" parent="HitZone"]
+texture = ExtResource("4_ihreq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitZone"]
+shape = SubResource("RectangleShape2D_thj8p")
+
+[node name="MusicPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_ihreq")
