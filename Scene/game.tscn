@@ -1,33 +1,68 @@
-[gd_scene load_steps=7 format=3 uid="uid://cyhmw4y7qjksk"]
+[gd_scene load_steps=10 format=3 uid="uid://cyhmw4y7qjksk"]
 
-[ext_resource type="Script" uid="uid://d0vl60fauhtaw" path="res://Scripts/game.gd" id="1_mhtsl"]
+[ext_resource type="Script" uid="uid://cdxcanwqb3y2b" path="res://Scene/game.gd" id="1_4jv7b"]
+[ext_resource type="PackedScene" uid="uid://bdvkdv77fslji" path="res://addons/midi/ADSR.tscn" id="2_03iqk"]
 [ext_resource type="PackedScene" uid="uid://cge5wjkq1tuwv" path="res://Scene/brick.tscn" id="2_w51g1"]
-[ext_resource type="Script" uid="uid://csjfn5xfcxslf" path="res://Scripts/hit_zone.gd" id="3_03iqk"]
-[ext_resource type="Texture2D" uid="uid://csyg4wbdcdiur" path="res://Assets/fruit-1-hit-box.png" id="4_ihreq"]
-[ext_resource type="AudioStream" uid="uid://xjqyyxft7cvt" path="res://Songs/old_time_slow.mp3" id="5_ihreq"]
+[ext_resource type="PackedScene" uid="uid://cuyd1qv0pn26e" path="res://addons/midi/MidiPlayer.tscn" id="3_ihreq"]
+[ext_resource type="AudioStream" uid="uid://d2k0qqrv3n42b" path="res://Songs/03 Firefly.mp3" id="5_ihreq"]
+[ext_resource type="Texture2D" uid="uid://csyg4wbdcdiur" path="res://Assets/fruit-1-hit-box.png" id="6_thj8p"]
+[ext_resource type="Texture2D" uid="uid://csl68w08f8ans" path="res://Assets/fruit-2-hit-box.png" id="7_h8jt7"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_thj8p"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h8jt7"]
+size = Vector2(62, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sagxc"]
 size = Vector2(60, 60)
 
-[node name="Game" type="Node2D"]
-script = ExtResource("1_mhtsl")
+[node name="Game" type="Node2D" node_paths=PackedStringArray("hitbox1", "hitbox2")]
+script = ExtResource("1_4jv7b")
 brick_scene = ExtResource("2_w51g1")
+hitbox1 = NodePath("hitbox1")
+hitbox2 = NodePath("hitbox2")
 
-[node name="SpawnTimer" type="Timer" parent="."]
-autostart = true
+[node name="ADSR" parent="." instance=ExtResource("2_03iqk")]
 
-[node name="SpawnPoint" type="Marker2D" parent="."]
-position = Vector2(585, 0)
+[node name="MidiPlayer" parent="." instance=ExtResource("3_ihreq")]
+file = "res://Songs/P08FIREF.mid"
+playing = true
+volume_db = -80.0
+soundfont = "res://Songs/UprightPianoKW-20220221.sf2"
 
-[node name="HitZone" type="Area2D" parent="."]
-position = Vector2(585, 555)
-script = ExtResource("3_03iqk")
-
-[node name="Sprite2D" type="Sprite2D" parent="HitZone"]
-texture = ExtResource("4_ihreq")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitZone"]
-shape = SubResource("RectangleShape2D_thj8p")
-
-[node name="MusicPlayer" type="AudioStreamPlayer2D" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_ihreq")
+
+[node name="hitbox1" type="Area2D" parent="."]
+position = Vector2(500, 500)
+collision_layer = 2
+
+[node name="Avatar" type="Sprite2D" parent="hitbox1"]
+texture = ExtResource("6_thj8p")
+
+[node name="Collision" type="CollisionShape2D" parent="hitbox1"]
+shape = SubResource("RectangleShape2D_h8jt7")
+
+[node name="hitbox2" type="Area2D" parent="."]
+position = Vector2(680, 500)
+collision_layer = 4
+
+[node name="Avatar" type="Sprite2D" parent="hitbox2"]
+texture = ExtResource("7_h8jt7")
+
+[node name="Collision" type="CollisionShape2D" parent="hitbox2"]
+shape = SubResource("RectangleShape2D_sagxc")
+
+[node name="ScoreLabel" type="Label" parent="."]
+offset_left = 1062.0
+offset_right = 1102.0
+offset_bottom = 23.0
+
+[node name="FeedbackLabel" type="Label" parent="."]
+offset_left = 80.0
+offset_top = 48.0
+offset_right = 120.0
+offset_bottom = 71.0
+
+[node name="FeedbackTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="midi_event" from="MidiPlayer" to="." method="_on_midi_player_midi_event"]

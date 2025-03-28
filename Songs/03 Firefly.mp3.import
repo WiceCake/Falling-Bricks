@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d2k0qqrv3n42b"
+path="res://.godot/imported/03 Firefly.mp3-41e1eb325f0b218af124a11fd73a3747.mp3str"
+
+[deps]
+
+source_file="res://Songs/03 Firefly.mp3"
+dest_files=["res://.godot/imported/03 Firefly.mp3-41e1eb325f0b218af124a11fd73a3747.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
